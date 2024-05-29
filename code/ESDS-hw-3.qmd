@@ -65,7 +65,7 @@ print(ft) # show flextable output
 ```
 b. Write a 5-6 sentence “statistical methods” section. (8 points)
 
-**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I…**
+**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I then used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics. I looked for homoscedasticity (randomly distributed residuals), normally distributed residusls on the QQ plot, and a lack of problematic outliers.**
 
 ## reading in packages
 
