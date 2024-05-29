@@ -18,6 +18,9 @@ root mass (units: g): mass of root tissue
 
 shoot mass (units: g): mass of aboveground tissue  
 
+
+
+
 # Problem 1: Multiple linear regression (52 points)
 
 ## reading in packages
@@ -60,6 +63,9 @@ ft <- flextable(model_types) # create flextable
 ft <- set_caption(ft, caption = "Table 1: Multiple linear regression model types and predictor variables") # create flextable caption describing columns and rows
 print(ft) # show flextable output
 ```
+b. Write a 5-6 sentence “statistical methods” section. (8 points)
+
+**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I…**
 
 ## reading in packages
 
@@ -245,6 +251,15 @@ model3 <- lm(total_g ~ sla + species_name,
 
 plot(model3)
 ```
+## 4. total biomass as a function of water treatment and species
+
+```{r}
+model4 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+
+plot(model4)
+```
+
 
 # Model selection
 
@@ -254,7 +269,8 @@ From the `MuMIn` package
 model.sel(model0,
           model1, 
           model2, 
-          model3)
+          model3,
+          model4)
 ```
 
 Out of the four models we have tried, the best model is the one that includes **insert predictors here**  
