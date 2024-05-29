@@ -8,6 +8,8 @@ execute: # for all code chunks
     message: false # do not display messages
 ---
 
+https://github.com/katie-cheslick/cheslick-katie-hw-3.git
+
 **Relevant definitions:**  
 
 specific leaf area (SLA, units: mm^2^/g): surface area of a leaf divided by its dry mass, represents life strategy (high SLA = large surface area and low mass = "fast" species)  
@@ -18,16 +20,52 @@ shoot mass (units: g): mass of aboveground tissue
 
 # Problem 1: Multiple linear regression (52 points)
 
+## reading in packages
+
+```{r}
+# general use
+library(flextable)
+library(tidyverse)
+library(readxl)
+library(here)
+library(janitor)
+
+# visualizing pairs
+library(GGally)
+
+# model selection
+library(MuMIn)
+
+# model predictions
+library(ggeffects)
+
+# model tables
+library(gtsummary)
+library(modelsummary)
+
+```
+
+## questions
+
 a) Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
 
 ```{r}
+library(flextable) # access any necessary packages
+library(tidyverse)
+library(janitor)
 
+model_types <- read.csv("modeltypes.csv") # read in data 
+
+ft <- flextable(model_types) # create flextable
+ft <- set_caption(ft, caption = "Table 1: Multiple linear regression model types and predictor variables") # create flextable caption describing columns and rows
+print(ft) # show flextable output
 ```
 
 ## reading in packages
 
 ```{r}
 # general use
+library(flextable)
 library(tidyverse)
 library(readxl)
 library(here)
