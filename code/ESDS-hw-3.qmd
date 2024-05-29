@@ -10,15 +10,6 @@ execute: # for all code chunks
 
 https://github.com/katie-cheslick/cheslick-katie-hw-3.git
 
-**Relevant definitions:**  
-
-specific leaf area (SLA, units: mm^2^/g): surface area of a leaf divided by its dry mass, represents life strategy (high SLA = large surface area and low mass = "fast" species)  
-
-root mass (units: g): mass of root tissue  
-
-shoot mass (units: g): mass of aboveground tissue  
-
-
 
 
 # Problem 1: Multiple linear regression (52 points)
@@ -60,12 +51,23 @@ library(janitor)
 model_types <- read.csv("modeltypes.csv") # read in data 
 
 ft <- flextable(model_types) # create flextable
-ft <- set_caption(ft, caption = "Table 1: Multiple linear regression model types and predictor variables") # create flextable caption describing columns and rows
+ft <- set_caption(ft, caption = ("Table 1: Multiple linear regression model types and predictor variables") # create flextable caption describing columns and rows
 print(ft) # show flextable output
 ```
-b. Write a 5-6 sentence “statistical methods” section. (8 points)
+b) Write a 5-6 sentence “statistical methods” section. (8 points)
 
-**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I then used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics. I looked for homoscedasticity (randomly distributed residuals), normally distributed residusls on the QQ plot, and a lack of problematic outliers.**
+**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I then used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics. I looked for homoscedasticity (randomly distributed residuals), normally distributed residuals on the QQ plot, and a lack of problematic outliers.**
+
+c) Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
+
+```{r}
+ggpredict(model4,
+          terms = c("species_name",
+                    "water_treatment")) %>% 
+  plot(show_data = TRUE)
+ 
+  
+```
 
 ## reading in packages
 
