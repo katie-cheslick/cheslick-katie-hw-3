@@ -118,9 +118,11 @@ ggplot() +
 
 d) Write a caption for your visualization. (6 points)
 
+**Figure 1: **
+
 e) Write a 3-4 sentence results section. (10 points)
 
-**On average, plants in the well watered treatment had 0.12 ± 0.02 grams more plant mass than plants in the drought stressed treatment, across species. On average, Encelia california, Eschscholzia california, Grindelia camporum, Nasella pulchra, Penstemon centranthifolius, and Salvia leucophylla plant species had more plant mass than Acmispon glaber (0.22 ± 0.03 g, 0.23 ± 0.03 g, 0.31 ± 0.03 g, 0.23 ± 0.03 g, 0.05 ± 0.03 g, and 0.12 ± 0.03 g, respectively).**
+**Species type and water treatment were found to be the best predictors of total plant mass (linear regression, F(62,7) = 27.1, p < 0.001, ⍺ = 0.05). Based on model predictions, plants in the well watered treatment had 0.12 ± 0.02 grams more plant mass than plants in the drought stressed treatment, on average across species. On average, Encelia california, Eschscholzia california, Grindelia camporum, Nasella pulchra, Penstemon centranthifolius, and Salvia leucophylla plant species had more plant mass than Acmispon glaber (0.22 ± 0.03 g, 0.23 ± 0.03 g, 0.31 ± 0.03 g, 0.23 ± 0.03 g, 0.05 ± 0.03 g, and 0.12 ± 0.03 g, respectively).**
 
 
 ## reading in packages
