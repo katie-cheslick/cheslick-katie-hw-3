@@ -50,13 +50,20 @@ library(janitor)
 
 model_types <- read.csv("modeltypes.csv") # read in data 
 
+drought_exp <- read_xlsx(path = here("data", 
+                                     "Valliere_etal_EcoApps_Data.xlsx")
+
+model_types <- read_xlsx(path = here("data", 
+                                     "modeltypes.xlsx")
+
 ft <- flextable(model_types) # create flextable
 ft <- set_caption(ft, caption = ("Table 1: Multiple linear regression model types and predictor variables") # create flextable caption describing columns and rows
 print(ft) # show flextable output
+
 ```
 b) Write a 5-6 sentence “statistical methods” section. (8 points)
 
-**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I then used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics. I looked for homoscedasticity (randomly distributed residuals), normally distributed residuals on the QQ plot, and a lack of problematic outliers.**
+**In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created and assessed five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model, which was 0 for the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics, which were visualized by coding the 'plot()' of that linear model. I looked for homoscedasticity (randomly distributed residuals), normally distributed residuals on the QQ plot (a straight line along the dotted diagonal), and outliers located within Cook's distance.**
 
 c) Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
 
@@ -64,10 +71,18 @@ c) Make a visualization of the model predictions with underlying data for your �
 ggpredict(model4,
           terms = c("species_name",
                     "water_treatment")) %>% 
-  plot(show_data = TRUE)
+  plot(show_data = TRUE) + 
+  theme(panel.grid = element_blank()) 
  
   
 ```
+
+d) Write a caption for your visualization. (6 points)
+
+e) Write a 3-4 sentence results section. (10 points)
+
+**On average, plants in the well watered treatment had 0.12 ± 0.02 grams more plant mass than plants in the drought stressed treatment, across species. On average, Encelia california, Eschscholzia california, Grindelia camporum, Nasella pulchra, Penstemon centranthifolius, and Salvia leucophylla plant species had more plant mass than Acmispon glaber (0.22 ± 0.03 g, 0.23 ± 0.03 g, 0.31 ± 0.03 g, 0.23 ± 0.03 g, 0.05 ± 0.03 g, and 0.12 ± 0.03 g, respectively).**
+
 
 ## reading in packages
 
@@ -282,7 +297,7 @@ Note that this may change once you fit and compare the other model!
 # Model summary
 
 ```{r}
-summary(model1)
+summary(model4)
 ```
 
 What are the reference levels?  
@@ -392,3 +407,4 @@ modelsummary::modelsummary( # this function takes a list of models
 **Note 1: notice all the information at the bottom of the `modelsummary` output - if you only needed the AIC and delta AIC, what could you do? see package documentation for help**
 
 **Note 2: you will always have to report the F-statistic, degrees of freedom, test statistic, p-value, ⍺, and R^2^. Whether or not this information is in a table is up to you.**
+
