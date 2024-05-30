@@ -105,10 +105,13 @@ ggplot() +
             aes(x = species_name, 
                 y = predicted,
                 color = water_treatment)) +
-  # cleaner theme
+  # cleaner theme and no gridlines
   theme_classic() +
   # creating different panels for species
-  facet_wrap(~species_name)
+  facet_wrap(~species_name) + 
+  labs(x = "Species name",
+       y = "Plant mass (g)",
+       title = "Influence of Plant Species and Water Treatment on Plant Mass")
  
   
 ```
