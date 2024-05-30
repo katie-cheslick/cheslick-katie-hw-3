@@ -1,11 +1,7 @@
 ---
 title: "Homework 3"
 format: docx
-  html: 
-    toc: true # includes a table of contents in rendered html format
-execute: # for all code chunks
-    warning: false # do not display warnings
-    message: false # do not display messages
+
 ---
 
 https://github.com/katie-cheslick/cheslick-katie-hw-3.git
@@ -47,14 +43,14 @@ a) Make a table or list of all the models from class and the last one you constr
 
 # read in data from excel sheet
 model_types <- read_xlsx(path = here("data", 
-                                     "modeltypes.xlsx"))
+                                     "updatedmodeltypes.xlsx"))
 
 # create flextable
 ft <- flextable(model_types) 
 # create flextable caption describing table content
 ft <- set_caption(ft, caption = ("Table 1: Displays five multiple regression model types used to assess the influence of water treatment, species, and specific leaf area on plant mass, including a null model, a saturated model, and simple models. The null model has no predictor variables, the saturated model includes all predictors, and the simple models have unique combinations of the three predictor variables.")) 
 # add table title
-ft <- add_header_row(ft, values = "Multiple Linear Regression Model Types", colwidths = c(3))
+ft <- add_header_row(ft, values = "Multiple Linear Regression Model Types", colwidths = c(5))
 # show flextable output
 print(ft) 
 
@@ -63,22 +59,46 @@ b) Write a 5-6 sentence “statistical methods” section. (8 points)
 
 **In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created and assessed five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model, which was 0 for the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics, which were visualized by coding the 'plot()' of that linear model. I looked for homoscedasticity (randomly distributed residuals), normally distributed residuals on the QQ plot (a straight line along the dotted diagonal), and outliers located within Cook's distance.**
 
+
 c) Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
-```{r}
-
-ggpredict(model4,
-          terms = c("species_name",
-                    "water_treatment")) %>% 
-  plot(show_data = TRUE) + 
-  theme(panel.grid = element_blank()) + 
-  facet_wrap(~x)
-
-```
 
 
 ```{r}
+drought_exp <- read_xlsx(path = here("data", 
+                                     "Valliere_etal_EcoApps_Data.xlsx"),
+                         sheet = "First Harvest")
+
+# quick look at data 
+str(drought_exp)
+class(drought_exp)
+
+# cleaning
+drought_exp_clean <- drought_exp %>% 
+  clean_names() %>% # nicer column names
+  mutate(species_name = case_when( # adding column with species scientific names
+    species == "ENCCAL" ~ "Encelia californica", # bush sunflower
+    species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
+    species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
+    species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
+    species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
+    species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
+    species == "LOTSCO" ~ "Acmispon glaber" # deerweed
+  )) %>% 
+  relocate(species_name, .after = species) %>% # moving species_name column after species
+  mutate(water_treatment = case_when( # adding column with full treatment names
+    water == "WW" ~ "Well watered",
+    water == "DS" ~ "Drought stressed"
+  )) %>% 
+  relocate(water_treatment, .after = water) # moving water_treatment column after water
+# create model 4 with water treatment and sp as predictors
+model4 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+# plot the model
+plot(model4)
+
+# create data table of predictions for model 4
 model_preds4 <- ggpredict(model4, 
-                         terms = c("water_treatment", 
+                         terms = c("water_treatment", # set the terms we are interested in
                                    "species_name"))
 
 # creating new data frame of model predictions for plotting
@@ -87,22 +107,22 @@ model_preds_plotting4 <- model_preds4 %>%
          water_treatment = x,
          total_g = predicted)
 
-# use View(model_preds_for_plotting) 
-# to compare this to the original model_preds data frame
+# use View(model_preds_for_plotting) to compare this to the original model_preds data frame
 
 ggplot() +
-  # underlying data
+  # set underlying data
   geom_point(data = drought_exp_clean,
-             aes(x = species_name,
-                 y = total_g,
-                 color = water_treatment)) +
+             aes(x = species_name, # set x axis
+                 y = total_g, # set y axis
+                 color = water_treatment)) + # use different colors for each water treatment
   # cleaner theme and no gridlines
   theme_classic() +
   # creating different panels for species
   facet_wrap(~species_name) + 
-  labs(x = "Species name",
-       y = "Plant mass (g)",
-       title = "Influence of Plant Species and Water Treatment on Plant Mass") + 
+  labs(x = "Species name", # rename x axis
+       y = "Plant mass (g)", # rename y axis
+       title = "Influence of Plant Species and Water Treatment on Plant Mass") + # add title
+  # change colors
   scale_color_manual(values = c("Well watered" = "green", "Drought stressed" = "pink"))
  
   
@@ -385,57 +405,6 @@ model_preds4 <- ggpredict(model4,
 # use model_preds to see the predictions formatted nicely
 ```
 
-# Visualization
-
-**Note:** this is the quick way to visualize model predictions. For your homework, you may find it easier to plot things yourself (i.e. not using the `plot()` functionality within `ggeffects`). See lecture for an example of how to do this.  
-
-```{r}
-# plot function within ggeffects
-plot(model_preds, # model predictions
-     limit_range = TRUE, # limit the range of predictions to the range of predictor values
-     show_data = TRUE) + # show the underlying data
-  # everything below this is ggplot() stuff
-  theme_classic() + # classic theme
-  labs(title = "Preliminary model visualization") + # plot title
-  theme(panel.grid = element_blank()) # getting rid of gridlines
-```
-
-The "more customizable" way:
-
-```{r}
-# creating new data frame of model predictions for plotting
-model_preds_for_plotting <- model_preds %>% 
-  rename(sla = x, # renaming columns to make this easier to use
-         water_treatment = group,
-         species_name = facet)
-
-# use View(model_preds_for_plotting) 
-# to compare this to the original model_preds data frame
-
-ggplot() +
-  # underlying data
-  geom_point(data = drought_exp_clean,
-             aes(x = species_name,
-                 y = total_g,
-                 color = water_treatment)) +
-  # model prediction 95% CI ribbon
-  geom_ribbon(data = model_preds_for_plotting,
-              aes(x = species_name, 
-                  y = predicted,
-                  ymin = conf.low,
-                  ymax = conf.high,
-                  fill = water_treatment),
-              alpha = 0.2) +
-  # model prediction lines
-  geom_line(data = model_preds_for_plotting,
-            aes(x = species_name, 
-                y = predicted,
-                color = water_treatment)) +
-  # cleaner theme
-  theme_classic() +
-  # creating different panels for species
-  facet_wrap(~species_name) 
-```
 
 
 # Making a table
