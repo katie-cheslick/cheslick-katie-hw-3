@@ -66,13 +66,51 @@ b) Write a 5-6 sentence “statistical methods” section. (8 points)
 **In order to examine the influence of specific leaf area, water treatment, and species on plant mass, I created and assessed five linear models (a null model with no predictors, a saturated model with all predictors, and simpler models comparing only specific leaf area and water treatment, specific leaf area and species, and species and water treatment). I used the Akaike Information Criterion (AIC) to determine which model best predicted the data, which I assessed by looking for the lowest value of delta (the difference between the given model and the best model, which was 0 for the best model). I then confirmed that the best model conformed to the assumptions of a linear model by checking the diagnostics, which were visualized by coding the 'plot()' of that linear model. I looked for homoscedasticity (randomly distributed residuals), normally distributed residuals on the QQ plot (a straight line along the dotted diagonal), and outliers located within Cook's distance.**
 
 c) Make a visualization of the model predictions with underlying data for your “best” model. (20 points)
-
 ```{r}
+
 ggpredict(model4,
           terms = c("species_name",
                     "water_treatment")) %>% 
   plot(show_data = TRUE) + 
-  theme(panel.grid = element_blank()) 
+  theme(panel.grid = element_blank())
+
+```
+
+
+```{r}
+
+# creating new data frame of model predictions for plotting
+model_preds_for_plotting <- model_preds %>% 
+  rename(sla = x, # renaming columns to make this easier to use
+         water_treatment = group,
+         species_name = facet)
+
+# use View(model_preds_for_plotting) 
+# to compare this to the original model_preds data frame
+
+ggplot() +
+  # underlying data
+  geom_point(data = drought_exp_clean,
+             aes(x = species_name,
+                 y = total_g,
+                 color = water_treatment)) +
+  # model prediction 95% CI ribbon
+  geom_ribbon(data = model_preds_for_plotting,
+              aes(x = species_name, 
+                  y = predicted,
+                  ymin = conf.low,
+                  ymax = conf.high,
+                  fill = water_treatment),
+              alpha = 0.2) +
+  # model prediction lines
+  geom_line(data = model_preds_for_plotting,
+            aes(x = species_name, 
+                y = predicted,
+                color = water_treatment)) +
+  # cleaner theme
+  theme_classic() +
+  # creating different panels for species
+  facet_wrap(~species_name)
  
   
 ```
@@ -360,12 +398,12 @@ model_preds_for_plotting <- model_preds %>%
 ggplot() +
   # underlying data
   geom_point(data = drought_exp_clean,
-             aes(x = sla,
+             aes(x = species_name,
                  y = total_g,
                  color = water_treatment)) +
   # model prediction 95% CI ribbon
   geom_ribbon(data = model_preds_for_plotting,
-              aes(x = sla, 
+              aes(x = species_name, 
                   y = predicted,
                   ymin = conf.low,
                   ymax = conf.high,
@@ -373,7 +411,7 @@ ggplot() +
               alpha = 0.2) +
   # model prediction lines
   geom_line(data = model_preds_for_plotting,
-            aes(x = sla, 
+            aes(x = species_name, 
                 y = predicted,
                 color = water_treatment)) +
   # cleaner theme
