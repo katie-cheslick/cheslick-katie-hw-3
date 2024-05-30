@@ -125,6 +125,27 @@ e) Write a 3-4 sentence results section. (10 points)
 **Species type and water treatment were found to be the best predictors of total plant mass (linear regression, F(62,7) = 27.1, p < 0.001, ⍺ = 0.05). Based on model predictions, plants in the well watered treatment had 0.12 ± 0.02 grams more plant mass than plants in the drought stressed treatment, on average across species. On average, Encelia california, Eschscholzia california, Grindelia camporum, Nasella pulchra, Penstemon centranthifolius, and Salvia leucophylla plant species had more plant mass than Acmispon glaber (0.22 ± 0.03 g, 0.23 ± 0.03 g, 0.31 ± 0.03 g, 0.23 ± 0.03 g, 0.05 ± 0.03 g, and 0.12 ± 0.03 g, respectively).**
 
 
+
+# Question 2: Affective visualization (24 points)
+
+a) Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
+
+**For my personal data, I could create a representation of my sleep habits that is similar in form to Stefanie Posavec and Giorgia Lupi’s Dear Data project illustrating different types of goodbyes. I could create different colors and shapes associated with my predictor variables (day of week, whether I slept alone, if I was tired or anxious) and response variables (minutes asleep and quality of sleep), and organize the colors and shapes in a chronological way. I could then create a detailed legend explaining what the colors and shapes are telling the viewer.**
+
+b) Create a sketch (on paper) of your idea. (2 points)
+
+c) Make a draft of your visualization. (12 points)
+
+# Problem 3: Problem 3. Statistical critique (36 points)
+
+a) Revisit and summarize (6 points)
+
+b) Visual clarity (10 points)
+
+c) Aesthetic clarity (10 points)
+
+d) Recommendations (can be longer than 4 sentences, 10 points)
+
 ## reading in packages
 
 ```{r}
