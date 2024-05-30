@@ -44,19 +44,19 @@ library(modelsummary)
 a) Make a table or list of all the models from class and the last one you constructed on your own. Write a caption for your table. (8 points)
 
 ```{r}
-library(flextable) # access any necessary packages
-library(tidyverse)
-library(janitor)
-
 
 # read in data from excel sheet
 model_types <- read_xlsx(path = here("data", 
                                      "modeltypes.xlsx"))
 
-ft <- flextable(model_types) # create flextable
-ft <- set_caption(ft, caption = ("Table 1: Displays five multiple regression model types used to assess the influence of water treatment, species, and specific leaf area on plant mass, including a null model, a saturated model, and simple models. The null model has no predictor variables, the saturated model includes all predictors, and the simple models have unique combinations of the three predictor variables.")) # create flextable caption describing table content
+# create flextable
+ft <- flextable(model_types) 
+# create flextable caption describing table content
+ft <- set_caption(ft, caption = ("Table 1: Displays five multiple regression model types used to assess the influence of water treatment, species, and specific leaf area on plant mass, including a null model, a saturated model, and simple models. The null model has no predictor variables, the saturated model includes all predictors, and the simple models have unique combinations of the three predictor variables.")) 
+# add table title
 ft <- add_header_row(ft, values = "Multiple Linear Regression Model Types", colwidths = c(3))
-print(ft) # show flextable output
+# show flextable output
+print(ft) 
 
 ```
 b) Write a 5-6 sentence “statistical methods” section. (8 points)
@@ -70,18 +70,22 @@ ggpredict(model4,
           terms = c("species_name",
                     "water_treatment")) %>% 
   plot(show_data = TRUE) + 
-  theme(panel.grid = element_blank())
+  theme(panel.grid = element_blank()) + 
+  facet_wrap(~x)
 
 ```
 
 
 ```{r}
+model_preds4 <- ggpredict(model4, 
+                         terms = c("water_treatment", 
+                                   "species_name"))
 
 # creating new data frame of model predictions for plotting
-model_preds_for_plotting <- model_preds %>% 
-  rename(sla = x, # renaming columns to make this easier to use
-         water_treatment = group,
-         species_name = facet)
+model_preds_plotting4 <- model_preds4 %>% 
+  rename(species_name = group, # renaming columns to make this easier to use
+         water_treatment = x,
+         total_g = predicted)
 
 # use View(model_preds_for_plotting) 
 # to compare this to the original model_preds data frame
@@ -92,26 +96,14 @@ ggplot() +
              aes(x = species_name,
                  y = total_g,
                  color = water_treatment)) +
-  # model prediction 95% CI ribbon
-  geom_ribbon(data = model_preds_for_plotting,
-              aes(x = species_name, 
-                  y = predicted,
-                  ymin = conf.low,
-                  ymax = conf.high,
-                  fill = water_treatment),
-              alpha = 0.2) +
-  # model prediction lines
-  geom_line(data = model_preds_for_plotting,
-            aes(x = species_name, 
-                y = predicted,
-                color = water_treatment)) +
   # cleaner theme and no gridlines
   theme_classic() +
   # creating different panels for species
   facet_wrap(~species_name) + 
   labs(x = "Species name",
        y = "Plant mass (g)",
-       title = "Influence of Plant Species and Water Treatment on Plant Mass")
+       title = "Influence of Plant Species and Water Treatment on Plant Mass") + 
+  scale_color_manual(values = c("Well watered" = "green", "Drought stressed" = "pink"))
  
   
 ```
@@ -126,7 +118,7 @@ e) Write a 3-4 sentence results section. (10 points)
 
 
 
-# Question 2: Affective visualization (24 points)
+# Problem 2: Affective visualization (24 points)
 
 a) Describe in words what an affective visualization could look like for your personal data (3-5 sentences). (2 points)
 
@@ -135,6 +127,8 @@ a) Describe in words what an affective visualization could look like for your pe
 b) Create a sketch (on paper) of your idea. (2 points)
 
 c) Make a draft of your visualization. (12 points)
+
+
 
 # Problem 3: Problem 3. Statistical critique (36 points)
 
@@ -383,9 +377,8 @@ Interpret the model estimates for the:
 **Note:** only plot terms in the model you select - if your doesn't include one of these terms, take it out and adjust the plotting code accordingly!
 
 ```{r}
-model_preds <- ggpredict(model1, 
-                         terms = c("sla",
-                                   "water_treatment", 
+model_preds4 <- ggpredict(model4, 
+                         terms = c("water_treatment", 
                                    "species_name"))
 
 # use View(model_preds) to see the predictions as a data frame
