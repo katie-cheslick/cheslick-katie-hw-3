@@ -48,16 +48,14 @@ library(flextable) # access any necessary packages
 library(tidyverse)
 library(janitor)
 
-model_types <- read.csv("modeltypes.csv") # read in data 
 
-drought_exp <- read_xlsx(path = here("data", 
-                                     "Valliere_etal_EcoApps_Data.xlsx")
-
+# read in data from excel sheet
 model_types <- read_xlsx(path = here("data", 
-                                     "modeltypes.xlsx")
+                                     "modeltypes.xlsx"))
 
 ft <- flextable(model_types) # create flextable
-ft <- set_caption(ft, caption = ("Table 1: Multiple linear regression model types and predictor variables") # create flextable caption describing columns and rows
+ft <- set_caption(ft, caption = ("Table 1: Displays five multiple regression model types used to assess the influence of water treatment, species, and specific leaf area on plant mass, including a null model, a saturated model, and simple models. The null model has no predictor variables, the saturated model includes all predictors, and the simple models have unique combinations of the three predictor variables.")) # create flextable caption describing table content
+ft <- add_header_row(ft, values = "Multiple Linear Regression Model Types", colwidths = c(3))
 print(ft) # show flextable output
 
 ```
